@@ -1,4 +1,9 @@
+import { Box, Button, Collapse, IconButton, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
+
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { DataField } from '../..//types/template'
+import DeleteIcon from '@mui/icons-material/Delete'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import  ObjectForm  from './ObjectForm'
 import { useState } from 'react'
 import { useTemplate } from '../../contexts/TemplateContext'
@@ -34,76 +39,70 @@ export default function DataEditor() {
   }
 
   return (
-    <div className="border rounded-lg p-4">
-      <h2 className="text-xl font-bold mb-4">Data Fields</h2>
+    <Paper sx={{ p: 4, borderRadius: 2 }}>
+      <Typography variant="h5" fontWeight="bold" mb={3}>Data Fields</Typography>
       
       {/* Existing Fields */}
-      <div className="space-y-4 mb-6">
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 4 }}>
         {Object.entries(template.data).map(([id, field]) => (
-          <div key={id} className="border rounded p-3">
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex items-center gap-2">
-                <button
+          <Paper key={id} sx={{ p: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <IconButton
+                  size="small"
                   onClick={() => toggleField(id)}
-                  className="text-gray-500 hover:text-gray-700"
+                  sx={{ color: 'text.secondary' }}
                 >
-                  {expandedFields[id] ? '▼' : '▶'}
-                </button>
-                <span className="font-semibold">{field.name}</span>
-              </div>
-              <button
+                  {expandedFields[id] ? <ExpandMoreIcon /> : <ChevronRightIcon />}
+                </IconButton>
+                <Typography fontWeight="medium">{field.name}</Typography>
+              </Box>
+              <IconButton
+                color="error"
                 onClick={() => deleteData(id)}
-                className="text-red-500 hover:text-red-700"
+                size="small"
               >
-                Delete
-              </button>
-            </div>
-            {expandedFields[id] && (
-              <div className="space-y-2">
-                <div>
-                  <label className="block text-sm">Name:</label>
-                  <input
-                    type="text"
-                    value={field.name}
-                    onChange={(e) => updateData(id, { ...field, name: e.target.value })}
-                    className="w-full border rounded p-1"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm">Description:</label>
-                  <input
-                    type="text"
-                    value={field.description}
-                    onChange={(e) => updateData(id, { ...field, description: e.target.value })}
-                    className="w-full border rounded p-1"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm">Prompt:</label>
-                  <input
-                    type="text"
-                    value={field.prompt}
-                    onChange={(e) => updateData(id, { ...field, prompt: e.target.value })}
-                    className="w-full border rounded p-1"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm">Type:</label>
-                  <select
-                    value={field.type}
-                    onChange={(e) => updateData(id, { 
-                      ...field, 
-                      type: e.target.value as DataField['type'],
-                      attributes: e.target.value === 'object' ? {} : undefined
-                    })}
-                    className="w-full border rounded p-1"
-                  >
-                    <option value="string">String</option>
-                    <option value="numeric">Numeric</option>
-                    <option value="list">List</option>
-                    <option value="object">Object</option>
-                  </select>
-                </div>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+            <Collapse in={expandedFields[id]}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <TextField
+                  size="small"
+                  label="Name"
+                  value={field.name}
+                  onChange={(e) => updateData(id, { ...field, name: e.target.value })}
+                  fullWidth
+                />
+                <TextField
+                  size="small"
+                  label="Description"
+                  value={field.description}
+                  onChange={(e) => updateData(id, { ...field, description: e.target.value })}
+                  fullWidth
+                />
+                <TextField
+                  size="small"
+                  label="Prompt"
+                  value={field.prompt}
+                  onChange={(e) => updateData(id, { ...field, prompt: e.target.value })}
+                  fullWidth
+                />
+                <Select
+                  size="small"
+                  value={field.type}
+                  onChange={(e) => updateData(id, { 
+                    ...field, 
+                    type: e.target.value as DataField['type'],
+                    attributes: e.target.value === 'object' ? {} : undefined
+                  })}
+                  fullWidth
+                >
+                  <MenuItem value="string">String</MenuItem>
+                  <MenuItem value="numeric">Numeric</MenuItem>
+                  <MenuItem value="list">List</MenuItem>
+                  <MenuItem value="object">Object</MenuItem>
+                </Select>
                 {field.type === 'object' && (
                   <ObjectForm
                     field={field}
@@ -111,65 +110,68 @@ export default function DataEditor() {
                     updateData={updateData}
                   />
                 )}
-              </div>
-            )}
-          </div>
+              </Box>
+            </Collapse>
+          </Paper>
         ))}
-      </div>
+      </Box>
 
       {/* New Field Form */}
-      <div className="border-t pt-4">
-        <h3 className="font-semibold mb-2">Add New Field</h3>
-        <div className="space-y-2">
-          <input
-            type="text"
+      <Box sx={{ borderTop: 1, borderColor: 'divider', pt: 3 }}>
+        <Typography variant="h6" fontWeight="medium" mb={2}>Add New Field</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            size="small"
             value={newFieldId}
             onChange={(e) => setNewFieldId(e.target.value)}
             placeholder="Field ID"
-            className="w-full border rounded p-1"
+            fullWidth
           />
-          <input
-            type="text"
+          <TextField
+            size="small"
             value={newField.name}
             onChange={(e) => setNewField({ ...newField, name: e.target.value })}
             placeholder="Name"
-            className="w-full border rounded p-1"
+            fullWidth
           />
-          <input
-            type="text"
+          <TextField
+            size="small"
             value={newField.description}
             onChange={(e) => setNewField({ ...newField, description: e.target.value })}
             placeholder="Description"
-            className="w-full border rounded p-1"
+            fullWidth
           />
-          <input
-            type="text"
+          <TextField
+            size="small"
             value={newField.prompt}
             onChange={(e) => setNewField({ ...newField, prompt: e.target.value })}
             placeholder="Prompt"
-            className="w-full border rounded p-1"
+            fullWidth
           />
-          <select
+          <Select
+            size="small"
             value={newField.type}
             onChange={(e) => setNewField({ 
               ...newField, 
               type: e.target.value as DataField['type'] 
             })}
-            className="w-full border rounded p-1"
+            fullWidth
           >
-            <option value="string">String</option>
-            <option value="numeric">Numeric</option>
-            <option value="list">List</option>
-            <option value="object">Object</option>
-          </select>
-          <button
+            <MenuItem value="string">String</MenuItem>
+            <MenuItem value="numeric">Numeric</MenuItem>
+            <MenuItem value="list">List</MenuItem>
+            <MenuItem value="object">Object</MenuItem>
+          </Select>
+          <Button
+            variant="contained"
             onClick={handleAdd}
-            className="w-full bg-blue-500 text-white rounded p-2 hover:bg-blue-600"
+            fullWidth
+            sx={{ mt: 1 }}
           >
             Add Field
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Box>
+      </Box>
+    </Paper>
   )
 } 

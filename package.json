@@ -55,6 +55,10 @@
   "style": "dist/styles.css",
   "type": "module",
   "dependencies": {
+    "@emotion/react": "11.13.5",
+    "@emotion/styled": "11.13.5",
+    "@mui/icons-material": "6.1.8",
+    "@mui/material": "6.1.8",
     "reactflow": "11.11.4"
   }
 }
