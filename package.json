@@ -55,7 +55,6 @@
   "style": "dist/styles.css",
   "type": "module",
   "dependencies": {
-    "@storybook/addon-styling": "1.3.7",
     "reactflow": "11.11.4"
   }
 }
