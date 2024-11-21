@@ -1,5 +1,6 @@
 import 'reactflow/dist/style.css'
 
+import { Box, Paper, Typography } from '@mui/material'
 import ReactFlow, {
   Background,
   Controls,
@@ -23,12 +24,14 @@ export default function WorkflowGraph() {
       type: 'default',
       data: { 
         label: (
-          <div className="text-center">
-            <div className="font-bold">{template.workflow![id].name}</div>
-            <div className="text-xs">
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography sx={{ fontWeight: 'bold' }}>
+              {template.workflow![id].name}
+            </Typography>
+            <Typography variant="caption">
               {template.workflow![id].data?.length || 0} fields
-            </div>
-          </div>
+            </Typography>
+          </Box>
         )
       },
       position: {
@@ -54,9 +57,15 @@ export default function WorkflowGraph() {
 
   if (!template.workflow || Object.keys(template.workflow).length === 0) {
     return (
-      <div className="border rounded-lg p-4 text-center text-gray-500">
+      <Paper 
+        sx={{ 
+          p: 2, 
+          textAlign: 'center',
+          color: 'text.secondary'
+        }}
+      >
         No workflow steps defined
-      </div>
+      </Paper>
     )
   }
   console.log({
@@ -65,7 +74,14 @@ export default function WorkflowGraph() {
   })
 
   return (
-    <div className="border rounded-lg" style={{ height: 400 }}>
+    <Paper 
+      sx={{ 
+        height: 400,
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 1
+      }}
+    >
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -74,6 +90,6 @@ export default function WorkflowGraph() {
         <Controls />
         <Background />
       </ReactFlow>
-    </div>
+    </Paper>
   )
 } 

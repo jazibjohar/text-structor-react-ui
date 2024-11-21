@@ -1,4 +1,7 @@
+import { Box, Stack } from '@mui/material';
+
 import DataEditor from '../DataEditor';
+import Grid from '@mui/material/Grid';
 import ImportButton from '../ImportButton';
 import JsonPreview from '../JsonPreview';
 import ValidationErrors from '../ValidationErrors';
@@ -10,22 +13,33 @@ export default function TemplateBuilder() {
   const { errors } = useTemplate();
 
   return (
-    <>
+    <Box>
       <ValidationErrors errors={errors} />
-      <div className='flex justify-between items-center mb-4 mt-2'>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          my: 2
+        }}
+      >
         <ImportButton />
-      </div>
+      </Box>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <div className='space-y-4'>
-          <DataEditor />
-          <WorkflowEditor />
-        </div>
-        <div className='space-y-4'>
-          <WorkflowGraph />
-          <JsonPreview />
-        </div>
-      </div>
-    </>
+      <Grid container spacing={2} component="div">
+        <Grid xs={12} md={6} component="div">
+          <Stack spacing={2}>
+            <DataEditor />
+            <WorkflowEditor />
+          </Stack>
+        </Grid>
+        <Grid xs={12} md={6} component="div">
+          <Stack spacing={2}>
+            <WorkflowGraph />
+            <JsonPreview />
+          </Stack>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }

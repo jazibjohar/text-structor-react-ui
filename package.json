@@ -6,8 +6,7 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "dist/styles.css"
+    "dist"
   ],
   "scripts": {
     "build": "rollup -c",
@@ -28,6 +27,7 @@
     "@rollup/plugin-babel": "6.0.4",
     "@rollup/plugin-commonjs": "28.0.1",
     "@rollup/plugin-node-resolve": "15.3.0",
+    "@rollup/plugin-replace": "6.0.1",
     "@rollup/plugin-terser": "0.4.4",
     "@rollup/plugin-typescript": "12.1.1",
     "@storybook/addon-essentials": "8.4.5",
@@ -40,15 +40,12 @@
     "@storybook/types": "8.4.5",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "autoprefixer": "10.4.20",
-    "postcss": "8.4.49",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "rollup": "4.27.3",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "rollup-plugin-postcss": "4.0.2",
     "storybook": "8.4.5",
-    "tailwindcss": "3.4.15",
     "tslib": "2.8.1",
     "typescript": "5.6.3"
   },

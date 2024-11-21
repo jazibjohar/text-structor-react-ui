@@ -1,4 +1,13 @@
 import { AttributeValue, DataField } from '../../types/template'
+import {
+  Box,
+  Button,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 
 interface ObjectFormProps {
@@ -35,8 +44,9 @@ export default function ObjectForm({ field, id, updateData }: ObjectFormProps) {
   const renderValueInput = (key: string, value: AttributeValue) => {
     const isArray = Array.isArray(value);
     return (
-      <div className="flex flex-1 gap-2">
-        <select 
+      <Stack direction="row" spacing={2} flex={1}>
+        <Select
+          size="small"
           value={isArray ? 'list' : 'string'}
           onChange={(e) => {
             const newType = e.target.value;
@@ -52,29 +62,21 @@ export default function ObjectForm({ field, id, updateData }: ObjectFormProps) {
               });
             }
           }}
-          className="border rounded p-1"
+          sx={{ minWidth: 120 }}
         >
-          <option value="string">String</option>
-          <option value="list">List</option>
-        </select>
-        {isArray ? (
-          <input
-            type="text"
-            value={typeof value[0] === 'object' ? (value[0] as any).value || '' : value[0] || ''}
-            placeholder="Define what item should list have"
-            onChange={(e) => handlePromptChange(key, e.target.value)}
-            className="flex-1 border rounded p-1"
-          />
-        ) : (
-          <input
-            type="text"
-            value={typeof value === 'object' ? '' : (value || '')}
-            placeholder={`Define what value should this key have`}
-            onChange={(e) => handlePromptChange(key, e.target.value)}
-            className="flex-1 border rounded p-1"
-          />
-        )}
-      </div>
+          <MenuItem value="string">String</MenuItem>
+          <MenuItem value="list">List</MenuItem>
+        </Select>
+        <TextField
+          size="small"
+          fullWidth
+          value={isArray 
+            ? (typeof value[0] === 'object' ? (value[0] as any).value || '' : value[0] || '')
+            : (typeof value === 'object' ? '' : (value || ''))}
+          placeholder={isArray ? "Define what item should list have" : "Define what value should this key have"}
+          onChange={(e) => handlePromptChange(key, e.target.value)}
+        />
+      </Stack>
     )
   }
 
@@ -88,40 +90,41 @@ export default function ObjectForm({ field, id, updateData }: ObjectFormProps) {
   }
 
   return (
-    <div>
-      <label className="block text-sm">Attributes:</label>
-      <div className="space-y-2">
+    <Box>
+      <Typography variant="body2" sx={{ mb: 1 }}>Attributes:</Typography>
+      <Stack spacing={2}>
         {Object.entries(localAttributes).map(([key, value], i) => (
-          <div key={`key-${i}`} className="flex gap-2">
-            <input
-              type="text"
+          <Stack key={`key-${i}`} direction="row" spacing={2}>
+            <TextField
+              size="small"
               value={key}
               placeholder="Key"
               onChange={(e) => handleKeyChange(key, e.target.value, value)}
-              className="flex-1 border rounded p-1"
+              sx={{ flex: 1 }}
             />
             {renderValueInput(key, value)}
-          </div>
+          </Stack>
         ))}
-        <div className="flex gap-2">
-          <button
+        <Stack direction="row" spacing={2}>
+          <Button
             onClick={() => {
               const newKey = `field${Object.keys(localAttributes).length + 1}`
               const newAttributes = { ...localAttributes, [newKey]: '' }
               setLocalAttributes(newAttributes)
             }}
-            className="text-blue-500 hover:text-blue-700"
+            color="primary"
           >
             Add Attribute
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSave}
-            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700"
+            variant="contained"
+            color="primary"
           >
             Save Changes
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Stack>
+      </Stack>
+    </Box>
   )
 } 

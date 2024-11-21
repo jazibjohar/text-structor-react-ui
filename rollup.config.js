@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import { createRequire } from 'module';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
+import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
@@ -27,29 +28,26 @@ export default {
     },
   ],
   plugins: [
+    replace({
+      preventAssignment: true,
+      'use client': '',
+      delimiters: ['', '']
+    }),
     peerDepsExternal(),
     resolve({
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     }),
     commonjs(),
+    postcss({
+      extensions: ['.css'],
+      minimize: true,
+      inject: true,
+    }),
     typescript({
       tsconfig: './tsconfig.json',
       declaration: true,
       declarationDir: 'dist',
       exclude: ['**/*.test.tsx', '**/*.test.ts', '**/*.stories.tsx'],
-    }),
-    postcss({
-      config: {
-        path: './postcss.config.js',
-      },
-      extensions: ['.css'],
-      minimize: true,
-      extract: 'styles.css',
-      modules: true,
-      plugins: [
-        require('tailwindcss'),
-        require('autoprefixer'),
-      ]
     }),
     babel({
       babelHelpers: 'bundled',
