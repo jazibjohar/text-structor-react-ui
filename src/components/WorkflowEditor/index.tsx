@@ -1,3 +1,23 @@
+import {
+  Box,
+  Button,
+  Collapse,
+  FormControl,
+  IconButton,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography
+} from '@mui/material'
+
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import DeleteIcon from '@mui/icons-material/Delete'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { WorkflowStep } from '../../types/template'
 import { useState } from 'react'
 import { useTemplate } from '../../contexts/TemplateContext'
@@ -27,53 +47,55 @@ export default function WorkflowEditor() {
   }
 
   return (
-    <div className="border rounded-lg p-4">
-      <h2 className="text-xl font-bold mb-4">Workflow Steps</h2>
+    <Paper sx={{ p: 4, borderRadius: 2 }}>
+      <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>
+        Workflow Steps
+      </Typography>
       
       {/* Existing Workflows */}
-      <div className="space-y-4 mb-6">
+      <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
         {Object.entries(template.workflow || {}).map(([id, workflow]) => {
           const workflowStep = workflow as WorkflowStep;
           return (
-            <div key={id} className="border rounded p-3">
-              <div className="flex justify-between items-start mb-2">
-                <button 
+            <Paper key={id} variant="outlined" sx={{ p: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                <Button
                   onClick={() => toggleWorkflow(id)}
-                  className="font-semibold flex items-center gap-2"
+                  startIcon={expandedWorkflows[id] ? <ExpandMoreIcon /> : <ChevronRightIcon />}
+                  sx={{ textTransform: 'none' }}
                 >
-                  <span>{expandedWorkflows[id] ? '▼' : '▶'}</span>
-                  <span>{workflowStep.name}</span>
-                </button>
-                <button
+                  {workflowStep.name}
+                </Button>
+                <IconButton
                   onClick={() => deleteWorkflow(id)}
-                  className="text-red-500 hover:text-red-700"
+                  color="error"
+                  size="small"
                 >
-                  Delete
-                </button>
-              </div>
-              {expandedWorkflows[id] && (
-                <div className="space-y-2">
-                  <div>
-                    <label className="block text-sm">Name:</label>
-                    <input
-                      type="text"
-                      value={workflowStep.name}
-                      onChange={(e) => updateWorkflow(id, { ...workflowStep, name: e.target.value })}
-                      className="w-full border rounded p-1"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm">Description:</label>
-                    <input
-                      type="text"
-                      value={workflowStep.description}
-                      onChange={(e) => updateWorkflow(id, { ...workflowStep, description: e.target.value })}
-                      className="w-full border rounded p-1"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm">Type:</label>
-                    <select
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+              
+              <Collapse in={expandedWorkflows[id]}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <TextField
+                    label="Name"
+                    size="small"
+                    fullWidth
+                    value={workflowStep.name}
+                    onChange={(e) => updateWorkflow(id, { ...workflowStep, name: e.target.value })}
+                  />
+                  
+                  <TextField
+                    label="Description"
+                    size="small"
+                    fullWidth
+                    value={workflowStep.description}
+                    onChange={(e) => updateWorkflow(id, { ...workflowStep, description: e.target.value })}
+                  />
+                  
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Type</InputLabel>
+                    <Select
                       value={workflowStep.explain ? 'explain' : 'prompt'}
                       onChange={(e) => {
                         const type = e.target.value
@@ -91,123 +113,124 @@ export default function WorkflowEditor() {
                           })
                         }
                       }}
-                      className="w-full border rounded p-1"
+                      label="Type"
                     >
-                      <option value="prompt">Prompt</option>
-                      <option value="explain">Explain</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm">
-                      {workflowStep.explain ? 'Explanation' : 'Prompt'}:
-                    </label>
-                    <textarea
-                      value={workflowStep.explain || workflowStep.prompt || ''}
-                      onChange={(e) => {
-                        if (workflowStep.explain) {
-                          updateWorkflow(id, { ...workflowStep, explain: e.target.value })
-                        } else {
-                          updateWorkflow(id, { ...workflowStep, prompt: e.target.value })
-                        }
-                      }}
-                      className="w-full border rounded p-1"
-                      rows={3}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm">Required Steps:</label>
-                    <select
+                      <MenuItem value="prompt">Prompt</MenuItem>
+                      <MenuItem value="explain">Explain</MenuItem>
+                    </Select>
+                  </FormControl>
+                  
+                  <TextField
+                    label={workflowStep.explain ? 'Explanation' : 'Prompt'}
+                    multiline
+                    rows={3}
+                    fullWidth
+                    value={workflowStep.explain || workflowStep.prompt || ''}
+                    onChange={(e) => {
+                      if (workflowStep.explain) {
+                        updateWorkflow(id, { ...workflowStep, explain: e.target.value })
+                      } else {
+                        updateWorkflow(id, { ...workflowStep, prompt: e.target.value })
+                      }
+                    }}
+                  />
+                  
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Required Steps</InputLabel>
+                    <Select
                       multiple
                       value={workflowStep.requires || []}
-                      onChange={(e) => {
-                        const selected = Array.from(e.target.selectedOptions).map(option => option.value)
+                      onChange={(e: SelectChangeEvent<string[]>) => {
+                        const selected = typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
                         updateWorkflow(id, { ...workflowStep, requires: selected })
                       }}
-                      className="w-full border rounded p-1"
+                      input={<OutlinedInput label="Required Steps" />}
+                      renderValue={(selected) => selected.join(', ')}
                     >
                       {Object.keys(template.workflow || {})
                         .filter(wId => {
-                          // Don't show current workflow
                           if (wId === id) return false
-                          
-                          // If current workflow is explanation-based,
-                          // filter out other explanation-based workflows
-                          if (workflowStep.explain && template.workflow![wId].explain) {
-                            return false
-                          }
-
+                          if (workflowStep.explain && template.workflow![wId].explain) return false
                           return true
                         })
                         .map(wId => (
-                          <option key={wId} value={wId}>
-                            {`${wId} (${template.workflow![wId].name})`}
-                          </option>
+                          <MenuItem key={wId} value={wId}>
+                            <ListItemText primary={`${wId} (${template.workflow![wId].name})`} />
+                          </MenuItem>
                         ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm">Data Fields:</label>
-                    <select
+                    </Select>
+                  </FormControl>
+                  
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Data Fields</InputLabel>
+                    <Select
                       multiple
                       value={workflowStep.data || []}
-                      onChange={(e) => {
-                        const selected = Array.from(e.target.selectedOptions).map(option => option.value)
+                      onChange={(e: SelectChangeEvent<string[]>) => {
+                        const selected = typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value
                         updateWorkflow(id, { ...workflowStep, data: selected })
                       }}
-                      className="w-full border rounded p-1"
+                      input={<OutlinedInput label="Data Fields" />}
+                      renderValue={(selected) => selected.join(', ')}
                     >
                       {Object.keys(template.data).map(dataId => (
-                        <option key={dataId} value={dataId}>{`${dataId} (${template.data[dataId].name})`}</option>
+                        <MenuItem key={dataId} value={dataId}>
+                          <ListItemText primary={`${dataId} (${template.data[dataId].name})`} />
+                        </MenuItem>
                       ))}
-                    </select>
-                  </div>
-                </div>
-              )}
-            </div>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Collapse>
+            </Paper>
           )
         })}
-      </div>
+      </Box>
 
       {/* New Workflow Form */}
-      <div className="border-t pt-4">
-        <h3 className="font-semibold mb-2">Add New Workflow</h3>
-        <div className="space-y-2">
-          <input
-            type="text"
+      <Box sx={{ borderTop: 1, borderColor: 'divider', pt: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Add New Workflow
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            fullWidth
+            size="small"
             value={newWorkflowId}
             onChange={(e) => setNewWorkflowId(e.target.value)}
             placeholder="Workflow ID"
-            className="w-full border rounded p-1"
           />
-          <input
-            type="text"
+          <TextField
+            fullWidth
+            size="small"
             value={newWorkflow.name}
             onChange={(e) => setNewWorkflow({ ...newWorkflow, name: e.target.value })}
             placeholder="Name"
-            className="w-full border rounded p-1"
           />
-          <input
-            type="text"
+          <TextField
+            fullWidth
+            size="small"
             value={newWorkflow.description}
             onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
             placeholder="Description"
-            className="w-full border rounded p-1"
           />
-          <input
-            type="text"
+          <TextField
+            fullWidth
+            size="small"
             value={newWorkflow.prompt || ''}
             onChange={(e) => setNewWorkflow({ ...newWorkflow, prompt: e.target.value })}
             placeholder="Prompt/Explanation"
-            className="w-full border rounded p-1"
           />
-          <button
+          <Button
+            variant="contained"
             onClick={handleAdd}
-            className="w-full bg-blue-500 text-white rounded p-2 hover:bg-blue-600"
+            fullWidth
+            sx={{ mt: 1 }}
           >
             Add Workflow
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Box>
+      </Box>
+    </Paper>
   )
 } 

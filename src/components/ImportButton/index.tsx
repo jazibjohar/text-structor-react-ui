@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import ImportModal from '../ImportModal'
 import { useState } from 'react'
 
@@ -6,12 +7,20 @@ export default function ImportButton() {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => setIsImportModalOpen(true)}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        variant="contained"
+        sx={{
+          backgroundColor: '#3b82f6', // equivalent to bg-blue-500
+          '&:hover': {
+            backgroundColor: '#2563eb', // equivalent to bg-blue-600
+          },
+          px: 2, // equivalent to px-4
+          py: 1, // equivalent to py-2
+        }}
       >
         Import JSON
-      </button>
+      </Button>
 
       {isImportModalOpen && (
         <ImportModal

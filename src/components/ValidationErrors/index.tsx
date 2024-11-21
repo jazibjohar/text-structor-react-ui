@@ -1,4 +1,6 @@
-import { ValidationError } from '../..//types/template'
+import { Box, List, ListItem, Paper, Typography } from '@mui/material'
+
+import { ValidationError } from '../../types/template'
 
 interface ValidationErrorsProps {
   errors: ValidationError[]
@@ -14,25 +16,35 @@ export default function ValidationErrors({ errors }: ValidationErrorsProps) {
   }, {} as Record<string, ValidationError[]>)
 
   return (
-    <div className="space-y-2">
+    <Box sx={{ '& > *:not(:last-child)': { mb: 2 } }}>
       {Object.entries(errorsByType).map(([type, typeErrors]) => (
-        <div key={type} className="border rounded-lg p-4">
-          <h3 className="font-bold mb-2">{type} Errors ({typeErrors.length})</h3>
-          <ul className="space-y-2">
+        <Paper key={type} elevation={1} sx={{ p: 2, borderRadius: 1 }}>
+          <Typography variant="h6" sx={{ mb: 1 }}>
+            {type} Errors ({typeErrors.length})
+          </Typography>
+          <List sx={{ '& > *:not(:last-child)': { mb: 1 } }}>
             {typeErrors.map((error, index) => (
-              <li 
+              <ListItem
                 key={index}
-                className={`p-2 rounded ${
-                  error.severity === 'error' ? 'bg-red-100' : 'bg-yellow-100'
-                }`}
+                sx={{
+                  display: 'block',
+                  bgcolor: error.severity === 'error' 
+                    ? 'error.main' 
+                    : error.severity === 'warning'
+                    ? 'warning.main'
+                    : 'info.main',
+                  color: '#fff',
+                  borderRadius: 1,
+                  p: 1
+                }}
               >
-                <div className="font-semibold">{error.path}</div>
-                <div>{error.message}</div>
-              </li>
+                <Typography variant="subtitle2" sx={{ color: 'inherit' }}>{error.path}</Typography>
+                <Typography sx={{ color: 'inherit' }}>{error.message}</Typography>
+              </ListItem>
             ))}
-          </ul>
-        </div>
+          </List>
+        </Paper>
       ))}
-    </div>
+    </Box>
   )
 } 
