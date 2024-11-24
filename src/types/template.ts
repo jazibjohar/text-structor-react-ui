@@ -28,3 +28,17 @@ export interface ValidationError {
   message: string;
   severity: 'error' | 'warning';
 } 
+
+export interface EngineResponse {
+  results: {
+    [key: string]: any;
+  };
+  titles: {
+    [key: string]: {
+      workflow?: string;
+      data?: {
+        [key: string]: string;
+      };
+    };
+  };
+} 

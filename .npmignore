@@ -5,6 +5,9 @@ tests/
 .prettierrc
 tsconfig.json
 jest.config.js
+docs/
+.storybook
+.devbox
 
 # Output of 'npm pack'
 *.tgz

@@ -1,0 +1,94 @@
+{
+    "results": {
+      "main": {
+        "participants": [
+          "Alex",
+          "Sarah"
+        ],
+        "duration": 15.0,
+        "question_answers": {
+          "q_and_a": [
+            {
+              "who_asked": "Alex",
+              "question": "In your experience, how do you approach evaluating machine learning models, especially when comparing classical machine learning techniques to large language models (LLMs)?",
+              "who_answered": "Sarah",
+              "answer": "When evaluating machine learning models, it's important to understand the use case. For classical models, metrics like accuracy, precision, recall, and F1 score are commonly used.  For LLMs, evaluation is more nuanced. Metrics like BLEU, ROUGE, or METEOR are used for text generation, but human evaluation is crucial for assessing usefulness and relevance."
+            },
+            {
+              "who_asked": "Alex",
+              "question": "You touched on human evaluation there. Could you elaborate on how you would design or oversee an effective human evaluation process for an LLM?",
+              "who_answered": "Sarah",
+              "answer": "Human evaluation is key for subjective tasks.  Evaluators need clear guidelines, focusing on aspects like relevance, accuracy, fluency, and ethics.  Inter-annotator agreement is important, using metrics like Cohen's kappa.  Balancing subjective judgment with objective measures is also crucial."
+            },
+            {
+              "who_asked": "Alex",
+              "question": "With classical machine learning, how do you determine when a simpler model, like linear regression or logistic regression, is more suitable than a more complex model, like a deep neural network?",
+              "who_answered": "Sarah",
+              "answer": "Simpler models are better for smaller datasets or linear relationships. Complex models like neural networks handle non-linear relationships and large datasets but require more resources and tuning. Interpretability is another factor, with simpler models being easier to explain."
+            },
+            {
+              "who_asked": "Alex",
+              "question": "Moving back to LLMs, how do you balance computational cost with performance, especially when deploying these models in production?",
+              "who_answered": "Sarah",
+              "answer": "Balancing cost and performance for LLMs is challenging. Understanding end-user requirements is key. Techniques like model quantization, pruning, and distillation can help. Caching frequent responses and using cloud providers with elastic scaling are also options."
+            },
+            {
+              "who_asked": "Alex",
+              "question": "If you had to design an evaluation framework for an LLM in a domain like healthcare, what key components would you include?",
+              "who_answered": "Sarah",
+              "answer": "In healthcare, accuracy and safety are paramount.  The framework would focus on factual correctness, domain-specific evaluations by medical professionals, explainability of model suggestions, and ethical considerations like bias and usability testing."
+            },
+            {
+              "who_asked": "Sarah",
+              "question": "I\u2019d love to know more about how your team is currently approaching model evaluation and any resources or best practices you\u2019d recommend for someone who wants to grow in this area.",
+              "who_answered": "Alex",
+              "answer": "Absolutely. I\u2019ll share some insights and resources after this session."
+            }
+          ]
+        },
+        "interview-meeting": {
+          "sentiments": "Neutral\n",
+          "likely-hood-of-accepting": 4.0,
+          "summary": {
+            "pros": "Sarah demonstrates a good foundational understanding of machine learning model evaluation, covering both classical techniques and LLMs. She recognizes the importance of different metrics for various tasks and understands the nuances of evaluating unstructured text.  She also highlights the significance of human evaluation and considers factors like inter-annotator agreement. Her emphasis on interpretability and ethical considerations, particularly in sensitive domains like healthcare, is commendable.  She provides practical examples from her past experience, demonstrating a connection between theory and practice.",
+            "cons": "Sarah's responses are hesitant and filled with filler words like \"uh\" and \"um,\" suggesting a lack of confidence or preparedness.  While she touches upon important concepts, her explanations often lack depth and specific details.  She frequently admits to limited practical experience with LLMs and their deployment, relying heavily on theoretical knowledge gained through reading.  Although she identifies relevant evaluation strategies, she doesn't articulate how she would implement them in practice. This raises concerns about her readiness to handle complex real-world challenges.",
+            "should_we_hire": "Maybe",
+            "attendees": [
+              "Alex",
+              "Sarah"
+            ],
+            "topics": [
+              "Machine learning model evaluation",
+              "Classical machine learning techniques",
+              "Large language models (LLMs)",
+              "Human evaluation",
+              "Inter-annotator agreement",
+              "Model comparison (simpler vs. complex)",
+              "Computational cost vs. performance",
+              "Model deployment",
+              "Evaluation framework for healthcare",
+              "Ethical considerations in AI"
+            ]
+          }
+        }
+      }
+    },
+    "titles": {
+      "main": {
+        "workflow": "Entry Point",
+        "data": {
+          "participants": "Meeting Participants",
+          "duration": "Meeting Duration",
+          "question_answers": "Question and Answers"
+        },
+        "interview-meeting": {
+          "workflow": "Interview Meeting",
+          "data": {
+            "sentiments": "Meeting Sentiment",
+            "likely-hood-of-accepting": "Acceptance Probability",
+            "summary": "Interview Summary"
+          }
+        }
+      }
+    }
+  }
