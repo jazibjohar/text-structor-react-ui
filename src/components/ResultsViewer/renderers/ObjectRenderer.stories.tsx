@@ -19,7 +19,6 @@ export const Simple: Story = {
       age: 30,
       email: 'john@example.com'
     },
-    path: 'user'
   }
 }
 
@@ -34,7 +33,6 @@ export const NestedData: Story = {
         type: 'Interview'
       }
     },
-    path: 'meeting'
   }
 }
 
@@ -42,6 +40,5 @@ export const Empty: Story = {
   args: {
     title: 'Empty Data',
     data: {},
-    path: 'empty'
   }
 } 

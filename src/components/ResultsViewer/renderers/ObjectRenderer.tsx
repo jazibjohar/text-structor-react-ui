@@ -3,16 +3,19 @@ import {
   Typography
 } from '@mui/material'
 
-import DataRenderer from '../DataRenderer'
+import BaseTypeRenderer from './BaseTypeRenderer'
+import ListRenderer from './ListRenderer'
 import { groupDataByType } from '../../../helpers/helpers';
 
 interface ObjectRendererProps {
   title: string
   data: Record<string, any>
-  path: string
 }
 
-export default function ObjectRenderer({ title, data, path }: ObjectRendererProps) {
+
+
+
+export default function ObjectRenderer({ title, data }: ObjectRendererProps) {
   if (!data || Object.keys(data).length === 0) {
     return null
   }
@@ -20,20 +23,21 @@ export default function ObjectRenderer({ title, data, path }: ObjectRendererProp
   // Group data by types using the helper function
   const groupedData = groupDataByType(data);
 
-  // Helper function to render a group if it's not empty
+  // Updated renderGroup function to match ValueRenderer logic
   const renderGroup = (groupData: Record<string, any>) => {
     if (Object.keys(groupData).length === 0) return null;
-    
-    return (
-      <DataRenderer 
-        data={groupData} 
-        titles={Object.keys(groupData).reduce((acc, key) => {
-          acc[key] = key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, ' ')
-          return acc
-        }, {} as Record<string, string>)} 
-        path={path} 
-      />
-    );
+
+    return Object.entries(groupData).map(([key, value]) => {
+      if (Array.isArray(value)) {
+        return <ListRenderer key={key} title={key} data={value} />
+      }
+
+      if (typeof value === 'string' || typeof value === 'number') {
+        return <BaseTypeRenderer key={key} label={key} value={value} />
+      }
+
+      return <BaseTypeRenderer key={key} label={key} value={String(value)} />
+    });
   };
 
   return (
@@ -56,7 +60,7 @@ export default function ObjectRenderer({ title, data, path }: ObjectRendererProp
         {renderGroup(groupedData.primitives)}
         {renderGroup(groupedData.arrayStrings)}
         {renderGroup(groupedData.arrayObjects)}
-        {renderGroup(groupedData.objects)}
+        
       </Box>
     </Box>
   )

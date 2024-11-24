@@ -1,7 +1,5 @@
-import BaseTypeRenderer from './renderers/BaseTypeRenderer'
 import { Box } from '@mui/material'
-import ListRenderer from './renderers/ListRenderer'
-import ObjectRenderer from './renderers/ObjectRenderer'
+import { ValueRenderer } from './renderers/ValueRenderer'
 import { groupDataByType } from '../../helpers/helpers'
 
 type DataType = Record<string, unknown>
@@ -11,35 +9,6 @@ interface DataRendererProps {
   data: DataType
   titles: TitlesType
   path: string
-}
-
-const ValueRenderer = ({ 
-  value, 
-  title, 
-  path, 
-  keyName 
-}: { 
-  value: unknown
-  title: string
-  path: string
-  keyName: string 
-}) => {
-  if (Array.isArray(value)) {
-    return <ListRenderer key={keyName} title={title} data={value} />
-  }
-
-  if (typeof value === 'object' && value !== null) {
-    return (
-      <ObjectRenderer
-        key={keyName}
-        title={title}
-        data={value as DataType}
-        path={`${path}.${keyName}`}
-      />
-    )
-  }
-
-  return <BaseTypeRenderer key={keyName} label={title} value={value} />
 }
 
 const renderValues = (data: Record<string, unknown>, titles: TitlesType, path: string) => {
