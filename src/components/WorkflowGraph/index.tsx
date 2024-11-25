@@ -43,14 +43,14 @@ export default function WorkflowGraph() {
   const layout = {
     name: 'dagre',
     rankDir: 'LR',
-    padding: 50,
+    padding: 20,
     spacingFactor: 1.5,
     rankSep: 200,  // Reduced horizontal spacing
     nodeSep: 80,   // Reduced vertical spacing
     animate: true,
     animationDuration: 500,
     fit: true,
-    edgeSep: 50,   // Reduced edge spacing
+    edgeSep: 10,   // Reduced edge spacing
   }
 
   const stylesheet = [
@@ -152,7 +152,7 @@ export default function WorkflowGraph() {
       }}
     >
       <CytoscapeComponent
-        cy={(cy) => { cyRef.current = cy; }}
+        cy={(cy:any) => { cyRef.current = cy; }}
         elements={elements}
         layout={layout}
         stylesheet={stylesheet}
