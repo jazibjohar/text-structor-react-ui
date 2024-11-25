@@ -1,9 +1,10 @@
+import { useEffect, useMemo, useRef } from 'react';
+
 // @ts-ignore
 import CytoscapeComponent from 'react-cytoscapejs';
 import { Paper } from '@mui/material';
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import { useMemo } from 'react';
 import { useTemplate } from '../../contexts/TemplateContext';
 
 // Register the dagre layout
@@ -129,6 +130,16 @@ export default function WorkflowGraph() {
     }
   ]
 
+  // Add ref to store cytoscape instance
+  const cyRef = useRef<any>(null);
+
+  // Add effect to run layout when elements change
+  useEffect(() => {
+    if (cyRef.current) {
+      cyRef.current.layout(layout).run();
+    }
+  }, [elements]);
+
   return (
     <Paper 
       elevation={2}
@@ -141,6 +152,7 @@ export default function WorkflowGraph() {
       }}
     >
       <CytoscapeComponent
+        cy={(cy) => { cyRef.current = cy; }}
         elements={elements}
         layout={layout}
         stylesheet={stylesheet}
