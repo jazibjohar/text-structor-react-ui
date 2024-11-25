@@ -6,6 +6,7 @@ import {
 import BaseTypeRenderer from './BaseTypeRenderer'
 import ListRenderer from './ListRenderer'
 import { groupDataByType } from '../../../helpers/helpers';
+import {toTitleCase} from './helpers'
 
 interface ObjectRendererProps {
   title: string
@@ -29,14 +30,14 @@ export default function ObjectRenderer({ title, data }: ObjectRendererProps) {
 
     return Object.entries(groupData).map(([key, value]) => {
       if (Array.isArray(value)) {
-        return <ListRenderer key={key} title={key} data={value} />
+        return <ListRenderer key={key} title={toTitleCase(key)} data={value} />
       }
 
       if (typeof value === 'string' || typeof value === 'number') {
-        return <BaseTypeRenderer key={key} label={key} value={value} />
+        return <BaseTypeRenderer key={key} label={toTitleCase(key)} value={value} />
       }
 
-      return <BaseTypeRenderer key={key} label={key} value={String(value)} />
+      return <BaseTypeRenderer key={key} label={toTitleCase(key)} value={String(value)} />
     });
   };
 

@@ -7,18 +7,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
-
-// Add helper function
-const toTitleCase = (str: string) => {
-  return str
-    .split(/(?=[A-Z])|[_\s]/) // Split on capital letters, underscores, or spaces
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-};
+import {toTitleCase} from './helpers'
 
 // Add styled components
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

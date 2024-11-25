@@ -68,10 +68,6 @@ export default function WorkflowGraph() {
       </Paper>
     )
   }
-  console.log({
-    nodes,
-    edges
-  })
 
   return (
     <Paper 
