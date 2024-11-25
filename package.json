@@ -42,6 +42,7 @@
     "@storybook/react-vite": "8.4.5",
     "@storybook/test": "8.4.5",
     "@storybook/types": "8.4.5",
+    "@types/cytoscape-dagre": "2.3.3",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "react": "18.3.1",
@@ -58,6 +59,9 @@
     "@emotion/styled": "11.13.5",
     "@mui/icons-material": "6.1.8",
     "@mui/material": "6.1.8",
-    "reactflow": "11.11.4"
+    "@types/cytoscape": "3.21.8",
+    "cytoscape": "3.30.3",
+    "cytoscape-dagre": "2.5.0",
+    "react-cytoscapejs": "2.0.0"
   }
 }

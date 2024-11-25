@@ -1,91 +1,158 @@
-import 'reactflow/dist/style.css'
+// @ts-ignore
+import CytoscapeComponent from 'react-cytoscapejs';
+import { Paper } from '@mui/material';
+import cytoscape from 'cytoscape';
+import dagre from 'cytoscape-dagre';
+import { useMemo } from 'react';
+import { useTemplate } from '../../contexts/TemplateContext';
 
-import { Box, Paper, Typography } from '@mui/material'
-import ReactFlow, {
-  Background,
-  Controls,
-  Edge,
-  Node,
-  Position
-} from 'reactflow'
-
-import { useMemo } from 'react'
-import { useTemplate } from '../../contexts/TemplateContext'
+// Register the dagre layout
+cytoscape.use(dagre);
 
 export default function WorkflowGraph() {
   const { template } = useTemplate()
 
-  const { nodes, edges } = useMemo(() => {
+  const elements = useMemo(() => {
     if (!template.workflow) return { nodes: [], edges: [] }
-
-    const workflowIds = Object.keys(template.workflow)
-    const nodes: Node[] = workflowIds.map((id, index) => ({
-      id,
-      type: 'default',
+    
+    const nodes = Object.entries(template.workflow).map(([id, workflow]) => ({
       data: { 
-        label: (
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography sx={{ fontWeight: 'bold' }}>
-              {template.workflow![id].name}
-            </Typography>
-            <Typography variant="caption">
-              {template.workflow![id].data?.length || 0} fields
-            </Typography>
-          </Box>
-        )
-      },
-      position: {
-        x: (index % 3) * 200 + 50,
-        y: Math.floor(index / 3) * 100 + 50
-      },
-      sourcePosition: Position.Right,
-      targetPosition: Position.Left,
+        id,
+        label: workflow.name,
+        fields: workflow.data?.length || 0,
+        type: workflow.prompt ? 'prompt' : 'explain'
+      }
     }))
 
-    const edges: Edge[] = workflowIds.flatMap(id => 
-      (template.workflow![id].requires || []).map((target: string) => ({
-        id: `${id}-${target}`,
-        source: target,
-        target: id,
-        type: 'smoothstep',
-        animated: true
-      }))
-    )
+    const edges = Object.entries(template.workflow)
+      .filter(([_, workflow]) => Array.isArray(workflow.requires))
+      .flatMap(([id, workflow]) => 
+        workflow.requires!.map(target => ({
+          data: {
+            id: `${id}-${target}`,
+            source: target,
+            target: id
+          }
+        }))
+      )
 
-    return { nodes, edges }
+    return [...nodes, ...edges]
   }, [template.workflow])
 
-  if (!template.workflow || Object.keys(template.workflow).length === 0) {
-    return (
-      <Paper 
-        sx={{ 
-          p: 2, 
-          textAlign: 'center',
-          color: 'text.secondary'
-        }}
-      >
-        No workflow steps defined
-      </Paper>
-    )
+  const layout = {
+    name: 'dagre',
+    rankDir: 'LR',
+    padding: 50,
+    spacingFactor: 1.5,
+    rankSep: 200,  // Reduced horizontal spacing
+    nodeSep: 80,   // Reduced vertical spacing
+    animate: true,
+    animationDuration: 500,
+    fit: true,
+    edgeSep: 50,   // Reduced edge spacing
   }
+
+  const stylesheet = [
+    {
+      selector: 'node',
+      style: {
+        'label': 'data(label)',
+        'text-valign': 'center',
+        'text-halign': 'center',
+        'background-color': '#ffffff',
+        'border-width': 2,
+        'border-color': '#666666',
+        'padding': '10px',
+        'width': '180px',     // Reduced width
+        'height': '60px',     // Reduced height
+        'font-size': '14px',  // Slightly smaller font
+        'font-weight': 'bold',
+        'text-wrap': 'wrap',
+        'text-max-width': '160px',  // Adjusted for new width
+        'shape': 'round-rectangle',
+        'shadow-blur': '5px',       // Reduced shadow
+        'shadow-color': '#888',
+        'shadow-opacity': 0.2,
+        'shadow-offset-x': '0px',
+        'shadow-offset-y': '2px',
+      }
+    },
+    {
+      selector: 'node[type = "prompt"]',
+      style: {
+        'border-color': '#2196F3',
+        'border-width': 2,
+        'background-color': '#E3F2FD'
+      }
+    },
+    {
+      selector: 'node[type = "explain"]',
+      style: {
+        'border-color': '#4CAF50',
+        'border-width': 2,
+        'background-color': '#E8F5E9'
+      }
+    },
+    {
+      selector: 'edge',
+      style: {
+        'curve-style': 'bezier',
+        'target-arrow-shape': 'vee',
+        'arrow-scale': 1.5,    // Slightly smaller arrows
+        'line-color': '#666666',
+        'target-arrow-color': '#666666',
+        'width': 2,            // Thinner edges
+        'source-endpoint': 'outside-to-node',
+        'target-endpoint': 'outside-to-node',
+        'edge-distances': 'node-position',
+        'control-point-step-size': 100,
+        'control-point-weights': 0.5,
+        'control-point-distances': 150,
+        'opacity': 0.7
+      }
+    },
+    {
+      selector: ':selected',
+      style: {
+        'background-color': '#fff4e6',
+        'line-color': '#FF9800',
+        'target-arrow-color': '#FF9800',
+        'source-arrow-color': '#FF9800'
+      }
+    },
+    {
+      selector: 'node:selected',
+      style: {
+        'border-color': '#FF9800',
+        'border-width': 3
+      }
+    }
+  ]
 
   return (
     <Paper 
+      elevation={2}
       sx={{ 
-        height: 400,
-        border: 1,
-        borderColor: 'divider',
-        borderRadius: 1
+        width: '100%',
+        height: '100%',
+        minHeight: '400px',
+        p: 2,
+        backgroundColor: '#fafafa',
       }}
     >
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        fitView
-      >
-        <Controls />
-        <Background />
-      </ReactFlow>
+      <CytoscapeComponent
+        elements={elements}
+        layout={layout}
+        stylesheet={stylesheet}
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          minHeight: '400px',
+          borderRadius: '8px',
+        }}
+        zoom={0.9}
+        pan={{ x: 50, y: 50 }}
+      />
     </Paper>
   )
 } 
