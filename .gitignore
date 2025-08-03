@@ -131,3 +131,4 @@ dist
 .DS_Store
 *storybook.log
 .devbox
+storybook-static

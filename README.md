@@ -1,8 +1,8 @@
-# ai-engine-react
+# text-structor-react-ui
 
-A React component library for building AI-powered template editors and workflow managers. This library provides a visual interface for creating JSON templates compatible with [ai-engine](https://github.com/jazibjohar/ai-engine) - a powerful asynchronous framework for orchestrating Large Language Model (LLM) workflows.
+A React component library for building AI-powered template editors and workflow managers. This library provides a visual interface for creating JSON templates compatible with [ai-text-structor](https://github.com/jazibjohar/ai-text-structor) - a powerful asynchronous framework for orchestrating Large Language Model (LLM) workflows.
 
-The generated templates can be used directly with ai-engine to:
+The generated templates can be used directly with ai-text-structor to:
 - Define structured data collection fields
 - Create complex workflow steps
 - Configure LLM prompts and explanations
@@ -11,7 +11,7 @@ The generated templates can be used directly with ai-engine to:
 ## Installation
 
 ```bash
-npm install ai-engine-react
+npm install text-structor-react-ui
 ```
 
 ## Core Components
@@ -21,7 +21,7 @@ npm install ai-engine-react
 The context provider that manages template state:
 
 ```tsx
-import { TemplateProvider } from 'ai-engine-react'
+import { TemplateProvider } from 'text-structor-react-ui'
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
 Component for managing data fields:
 
 ```tsx
-import { DataEditor } from 'ai-engine-react'
+import { DataEditor } from 'text-structor-react-ui'
 
 function TemplateSection() {
   return (
@@ -65,7 +65,7 @@ Supports field types:
 Editor for creating workflow steps:
 
 ```tsx
-import { WorkflowEditor } from 'ai-engine-react'
+import { WorkflowEditor } from 'text-structor-react-ui'
 
 function WorkflowSection() {
   return (
@@ -88,7 +88,7 @@ Features:
 Visual graph representation of workflow steps:
 
 ```tsx
-import { WorkflowGraph } from 'ai-engine-react'
+import { WorkflowGraph } from 'text-structor-react-ui'
 
 function GraphSection() {
   return (
@@ -111,7 +111,7 @@ Features:
 JSON visualization component:
 
 ```tsx
-import { JsonPreview } from 'ai-engine-react'
+import { JsonPreview } from 'text-structor-react-ui'
 
 function PreviewSection() {
   return (
@@ -134,7 +134,7 @@ Features:
 import { 
   TemplateProvider,
   TemplateBuilder
-} from 'ai-engine-react'
+} from 'text-structor-react-ui'
 
 function App() {
   return (
