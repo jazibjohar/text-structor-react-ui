@@ -1,6 +1,6 @@
 {
   "name": "text-structor-react-ui",
-  "version": "0.1.4",
+  "version": "0.1.0",
   "description": "React component library containing UI components for AI engine",
   "license": "Apache-2.0",
   "main": "dist/index.js",
